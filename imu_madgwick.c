@@ -1,7 +1,7 @@
 #include "stdlib.h"
 #include "stddef.h"
 
-#include "madgwick/imu_madgwick.h"
+#include "imu_madgwick.h"
 
 typedef struct imu_madgwick {
     float beta;
