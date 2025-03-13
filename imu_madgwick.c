@@ -228,7 +228,10 @@ err_code_t imu_madgwick_update_9dof(imu_madgwick_handle_t handle, float gx, floa
     float hx, hy;
     float _2q0mx, _2q0my, _2q0mz, _2q1mx, _2bx, _2bz, _4bx, _4bz, _2q0, _2q1, _2q2, _2q3, _2q0q2, _2q2q3, q0q0, q0q1, q0q2, q0q3, q1q1, q1q2, q1q3, q2q2, q2q3, q3q3;
 
-    
+    // Convert gyroscope degrees/sec to radians/sec
+    gx *= 0.0174533f;
+    gy *= 0.0174533f;
+    gz *= 0.0174533f;
 
     // Rate of change of quaternion from gyroscope
     qDot1 = 0.5f * (-q1 * gx - q2 * gy - q3 * gz);
@@ -237,7 +240,7 @@ err_code_t imu_madgwick_update_9dof(imu_madgwick_handle_t handle, float gx, floa
     qDot4 = 0.5f * (q0 * gz + q1 * gy - q2 * gx);
 
     // Compute feedback only if accelerometer measurement valid (avoids NaN in accelerometer normalisation)
-    if (!((ax == 0.0f) && (ay == 0.0f) && (az == 0.0f))) {
+    if(!((ax == 0.0f) && (ay == 0.0f) && (az == 0.0f))) {
 
         // Normalise accelerometer measurement
         recipNorm = invSqrt(ax * ax + ay * ay + az * az);
@@ -276,7 +279,7 @@ err_code_t imu_madgwick_update_9dof(imu_madgwick_handle_t handle, float gx, floa
         // Reference direction of Earth's magnetic field
         hx = mx * q0q0 - _2q0my * q3 + _2q0mz * q2 + mx * q1q1 + _2q1 * my * q2 + _2q1 * mz * q3 - mx * q2q2 - mx * q3q3;
         hy = _2q0mx * q3 + my * q0q0 - _2q0mz * q1 + _2q1mx * q2 - my * q1q1 + my * q2q2 + _2q2 * mz * q3 - my * q3q3;
-        _2bx = sqrt(hx * hx + hy * hy);
+        _2bx = sqrtf(hx * hx + hy * hy);
         _2bz = -_2q0mx * q2 + _2q0my * q1 + mz * q0q0 + _2q1mx * q3 - mz * q1q1 + _2q2 * my * q3 - mz * q2q2 + mz * q3q3;
         _4bx = 2.0f * _2bx;
         _4bz = 2.0f * _2bz;
