@@ -29,7 +29,7 @@ imu_madgwick_handle_t imu_madgwick_init()
     imu_madgwick_handle_t handle = calloc(1, sizeof(imu_madgwick_t));
     if (handle == NULL)
     {
-    	return NULL;
+        return NULL;
     }
 
     return handle;
@@ -122,10 +122,16 @@ err_code_t imu_madgwick_update_6dof(imu_madgwick_handle_t handle, float gx, floa
     float q3 = handle->q3;
     float beta = handle->beta;
     float sampleFreq = handle->sample_freq;
+
     float recipNorm;
     float s0, s1, s2, s3;
     float qDot1, qDot2, qDot3, qDot4;
     float _2q0, _2q1, _2q2, _2q3, _4q0, _4q1, _4q2 , _8q1, _8q2, q0q0, q1q1, q2q2, q3q3;
+
+    // Convert gyroscope degrees/sec to radians/sec
+    gx *= 0.0174533f;
+    gy *= 0.0174533f;
+    gz *= 0.0174533f;
 
     // Rate of change of quaternion from gyroscope
     qDot1 = 0.5f * (-q1 * gx - q2 * gy - q3 * gz);
@@ -134,7 +140,7 @@ err_code_t imu_madgwick_update_6dof(imu_madgwick_handle_t handle, float gx, floa
     qDot4 = 0.5f * (q0 * gz + q1 * gy - q2 * gx);
 
     // Compute feedback only if accelerometer measurement valid (avoids NaN in accelerometer normalisation)
-    if (!((ax == 0.0f) && (ay == 0.0f) && (az == 0.0f))) {
+    if(!((ax == 0.0f) && (ay == 0.0f) && (az == 0.0f))) {
 
         // Normalise accelerometer measurement
         recipNorm = invSqrt(ax * ax + ay * ay + az * az);
