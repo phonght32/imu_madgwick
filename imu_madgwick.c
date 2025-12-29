@@ -35,12 +35,12 @@ imu_madgwick_handle_t imu_madgwick_init()
     return handle;
 }
 
-err_code_t imu_madgwick_set_config(imu_madgwick_handle_t handle, imu_madgwick_cfg_t config)
+imu_madgwick_status_t imu_madgwick_set_config(imu_madgwick_handle_t handle, imu_madgwick_cfg_t config)
 {
     /* Check input conditions */
     if (handle == NULL) 
     {
-        return ERR_CODE_NULL_PTR;
+        return IMU_MADGWICK_STATUS_INVALID_ARG;
     }
 
     handle->beta = config.beta;
@@ -50,54 +50,54 @@ err_code_t imu_madgwick_set_config(imu_madgwick_handle_t handle, imu_madgwick_cf
     handle->q2 = 0.0f;
     handle->q3 = 0.0f;
 
-    return ERR_CODE_SUCCESS;
+    return IMU_MADGWICK_STATUS_SUCCESS;
 }
 
-err_code_t imu_madgwick_config(imu_madgwick_handle_t handle)
+imu_madgwick_status_t imu_madgwick_config(imu_madgwick_handle_t handle)
 {
     /* Check input conditions */
     if (handle == NULL) 
     {
-        return ERR_CODE_NULL_PTR;
+        return IMU_MADGWICK_STATUS_INVALID_ARG;
     }
 
     /* Nothing to do */
 
-    return ERR_CODE_SUCCESS;
+    return IMU_MADGWICK_STATUS_SUCCESS;
 }
 
-err_code_t imu_madgwick_set_beta(imu_madgwick_handle_t handle, float beta)
+imu_madgwick_status_t imu_madgwick_set_beta(imu_madgwick_handle_t handle, float beta)
 {
     /* Check input conditions */
     if (handle == NULL) 
     {
-        return ERR_CODE_NULL_PTR;
+        return IMU_MADGWICK_STATUS_INVALID_ARG;
     }
 
     handle->beta = beta;
 
-    return ERR_CODE_SUCCESS;
+    return IMU_MADGWICK_STATUS_SUCCESS;
 }
 
-err_code_t imu_madgwick_set_sample_frequency(imu_madgwick_handle_t handle, float sample_freq)
+imu_madgwick_status_t imu_madgwick_set_sample_frequency(imu_madgwick_handle_t handle, float sample_freq)
 {
     /* Check input conditions */
     if (handle == NULL) 
     {
-        return ERR_CODE_NULL_PTR;
+        return IMU_MADGWICK_STATUS_INVALID_ARG;
     }
 
     handle->sample_freq = sample_freq;
 
-    return ERR_CODE_SUCCESS;
+    return IMU_MADGWICK_STATUS_SUCCESS;
 }
 
-err_code_t imu_madgwick_get_quaternion(imu_madgwick_handle_t handle, float *q0, float *q1, float *q2, float *q3)
+imu_madgwick_status_t imu_madgwick_get_quaternion(imu_madgwick_handle_t handle, float *q0, float *q1, float *q2, float *q3)
 {
     /* Check input conditions */
     if (handle == NULL) 
     {
-        return ERR_CODE_NULL_PTR;
+        return IMU_MADGWICK_STATUS_INVALID_ARG;
     }
 
     *q0 = handle->q0;
@@ -105,15 +105,15 @@ err_code_t imu_madgwick_get_quaternion(imu_madgwick_handle_t handle, float *q0, 
     *q2 = handle->q2;
     *q3 = handle->q3;
 
-    return ERR_CODE_SUCCESS;
+    return IMU_MADGWICK_STATUS_SUCCESS;
 }
 
-err_code_t imu_madgwick_update_6dof(imu_madgwick_handle_t handle, float gx, float gy, float gz, float ax, float ay, float az) 
+imu_madgwick_status_t imu_madgwick_update_6dof(imu_madgwick_handle_t handle, float gx, float gy, float gz, float ax, float ay, float az) 
 {
     /* Check input conditions */
     if (handle == NULL) 
     {
-        return ERR_CODE_NULL_PTR;
+        return IMU_MADGWICK_STATUS_INVALID_ARG;
     }
     
     float q0 = handle->q0;
@@ -199,21 +199,21 @@ err_code_t imu_madgwick_update_6dof(imu_madgwick_handle_t handle, float gx, floa
     handle->q2 = q2;
     handle->q3 = q3;
 
-    return ERR_CODE_SUCCESS;
+    return IMU_MADGWICK_STATUS_SUCCESS;
 }
 
-err_code_t imu_madgwick_update_9dof(imu_madgwick_handle_t handle, float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz) 
+imu_madgwick_status_t imu_madgwick_update_9dof(imu_madgwick_handle_t handle, float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz) 
 {
     /* Check input conditions */
     if (handle == NULL) 
     {
-        return ERR_CODE_NULL_PTR;
+        return IMU_MADGWICK_STATUS_INVALID_ARG;
     }
 
     // Use IMU algorithm if magnetometer measurement invalid (avoids NaN in magnetometer normalisation)
     if ((mx == 0.0f) && (my == 0.0f) && (mz == 0.0f)) {
         imu_madgwick_update_6dof(handle, gx, gy, gz, ax, ay, az);
-        return ERR_CODE_SUCCESS;
+        return IMU_MADGWICK_STATUS_SUCCESS;
     }
 
     float q0 = handle->q0;
@@ -320,5 +320,5 @@ err_code_t imu_madgwick_update_9dof(imu_madgwick_handle_t handle, float gx, floa
     handle->q2 = q2;
     handle->q3 = q3;
 
-    return ERR_CODE_SUCCESS;
+    return IMU_MADGWICK_STATUS_SUCCESS;
 }

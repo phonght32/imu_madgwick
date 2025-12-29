@@ -8,7 +8,13 @@ extern "C" {
 #include "stdint.h"
 #include "math.h"
 
-#include "err_code.h"
+typedef enum 
+{
+    IMU_MADGWICK_STATUS_SUCCESS = 0,
+    IMU_MADGWICK_STATUS_FAILED, 
+    IMU_MADGWICK_STATUS_INVALID_ARG
+} imu_madgwick_status_t;
+
 
 typedef struct imu_madgwick *imu_madgwick_handle_t;
 
@@ -38,10 +44,10 @@ imu_madgwick_handle_t imu_madgwick_init();
  * @param   config Configuration structure.
  *
  * @return
- *      - ERR_CODE_SUCCESS: Success.
- *      - Others:           Fail.
+ *      - IMU_MADGWICK_STATUS_SUCCESS: Success.
+ *      - Others: Failed.
  */
-err_code_t imu_madgwick_set_config(imu_madgwick_handle_t handle, imu_madgwick_cfg_t config);
+imu_madgwick_status_t imu_madgwick_set_config(imu_madgwick_handle_t handle, imu_madgwick_cfg_t config);
 
 /*
  * @brief   Configuration parameters to run.
@@ -49,10 +55,10 @@ err_code_t imu_madgwick_set_config(imu_madgwick_handle_t handle, imu_madgwick_cf
  * @param 	handle Handle structure.
  *
  * @return
- *      - ERR_CODE_SUCCESS: Success.
- *      - Others:           Fail.
+ *      - IMU_MADGWICK_STATUS_SUCCESS: Success.
+ *      - Others: Failed.
  */
-err_code_t imu_madgwick_config(imu_madgwick_handle_t handle);
+imu_madgwick_status_t imu_madgwick_config(imu_madgwick_handle_t handle);
 
 /*
  * @brief   Set beta value.
@@ -61,10 +67,10 @@ err_code_t imu_madgwick_config(imu_madgwick_handle_t handle);
  * @param   beta Beta.
  *
  * @return
- *      - ERR_CODE_SUCCESS: Success.
- *      - Others:           Fail.
+ *      - IMU_MADGWICK_STATUS_SUCCESS: Success.
+ *      - Others: Failed.
  */
-err_code_t imu_madgwick_set_beta(imu_madgwick_handle_t handle, float beta);
+imu_madgwick_status_t imu_madgwick_set_beta(imu_madgwick_handle_t handle, float beta);
 
 /*
  * @brief   Set sample frequency value.
@@ -73,10 +79,10 @@ err_code_t imu_madgwick_set_beta(imu_madgwick_handle_t handle, float beta);
  * @param   sample_freq Sample frequency.
  *
  * @return
- *      - ERR_CODE_SUCCESS: Success.
- *      - Others:           Fail.
+ *      - IMU_MADGWICK_STATUS_SUCCESS: Success.
+ *      - Others: Failed.
  */
-err_code_t imu_madgwick_set_sample_frequency(imu_madgwick_handle_t handle, float sample_freq);
+imu_madgwick_status_t imu_madgwick_set_sample_frequency(imu_madgwick_handle_t handle, float sample_freq);
 
 /*
  * @brief   Get quaternion.
@@ -85,10 +91,10 @@ err_code_t imu_madgwick_set_sample_frequency(imu_madgwick_handle_t handle, float
  * @param   q0, q1, q2 q3 Quaternion data.
  *
  * @return
- *      - ERR_CODE_SUCCESS: Success.
- *      - Others:           Fail.
+ *      - IMU_MADGWICK_STATUS_SUCCESS: Success.
+ *      - Others: Failed.
  */
-err_code_t imu_madgwick_get_quaternion(imu_madgwick_handle_t handle, float *q0, float *q1, float *q2, float *q3);
+imu_madgwick_status_t imu_madgwick_get_quaternion(imu_madgwick_handle_t handle, float *q0, float *q1, float *q2, float *q3);
 
 /*
  * @brief   Update Madgwick AHRS quaternion with 6 motions.
@@ -102,10 +108,10 @@ err_code_t imu_madgwick_get_quaternion(imu_madgwick_handle_t handle, float *q0, 
  * @param   az Accelerometer along z axis.
  *
  * @return
- *      - ERR_CODE_SUCCESS: Success.
- *      - Others:           Fail.
+ *      - IMU_MADGWICK_STATUS_SUCCESS: Success.
+ *      - Others: Failed.
  */
-err_code_t imu_madgwick_update_6dof(imu_madgwick_handle_t handle, float gx, float gy, float gz, float ax, float ay, float az);
+imu_madgwick_status_t imu_madgwick_update_6dof(imu_madgwick_handle_t handle, float gx, float gy, float gz, float ax, float ay, float az);
 
 /*
  * @brief   Update Madgwick AHRS quaternion with 9 motions.
@@ -122,10 +128,10 @@ err_code_t imu_madgwick_update_6dof(imu_madgwick_handle_t handle, float gx, floa
  * @param   mz Magnetometer along z axis.
  *
  * @return
- *      - ERR_CODE_SUCCESS: Success.
- *      - Others:           Fail.
+ *      - IMU_MADGWICK_STATUS_SUCCESS: Success.
+ *      - Others: Failed.
  */
-err_code_t imu_madgwick_update_9dof(imu_madgwick_handle_t handle, float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz);
+imu_madgwick_status_t imu_madgwick_update_9dof(imu_madgwick_handle_t handle, float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz);
 
 
 #ifdef __cplusplus 
